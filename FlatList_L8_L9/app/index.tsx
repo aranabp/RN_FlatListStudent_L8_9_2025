@@ -1,3 +1,6 @@
+import ListItemSseparator from "@/components/ListItemSeperator";
+import { DATA, dataType } from "@/data/appData";
+import colors from "@/styles/colors";
 import defaultStyles from "@/styles/defaultStyles";
 import { useState } from "react";
 import {
@@ -11,17 +14,7 @@ import {
 
 export default function Index() {
 
-  type dataType = {
-      id: string; //refer to the unique indentifier
-      title: string; //text we will show in list
-  }
-  //using all caps bc DATA array will not change during its use
-  const DATA: dataType[] = [
-    {id: "1", title: "First Item"},
-    {id: "2", title: "First Item"},
-    {id: "3", title: "First Item"},
-    {id: "4", title: "First Item"},
-  ];
+ 
 
 //create a simple function telling me what was selected
 const selectedList = (item: dataType) => {
@@ -33,16 +26,36 @@ const [selectedId, setSelectedID] = useState<string>("1");
   return (
     <View style={defaultStyles.container}>
       <View style={defaultStyles.titleContainer}>
-        <Text style={defaultStyles.title}>Insert Title Here</Text>
+        <Text style={defaultStyles.title}>title wgat it is</Text>
       </View>
       <View style={[defaultStyles.textContainer, { flex: 1 }]}>
         <View style={styles.flatlistRow}>
               <FlatList
               data = {DATA}
+              extraData = {selectedId}
               keyExtractor = {(item: dataType) => item.id}
+              ItemSeparatorComponent={() => 
+                <ListItemSseparator color={colors.text.dark} />}
               renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => selectedList(item)}>
+                  <View style={[styles.flatlistRow,
+                    {
+                      backgroundColor: item.id === selectedId
+                      ? colors.primary
+                      : colors. secondary
+                    }
+                  ]}>
+                    <Text style = {[styles.titleText,
+                      {
+                        color:
+                        item.id === selectedId
+                        ? colors.text.light
+                        : colors.text.dark
+                      }
+                      ]}/>
+                  
                   <Text>{item.title}</Text>
+                  </View>
                 </TouchableOpacity>
               )}
               />
@@ -58,8 +71,11 @@ const styles = StyleSheet.create({
   },
   flatlistRow:{
     backgroundColor: 'pink',
-    margin: 15,
-    alignItems: 'center',
+  //  margin: 15,
+    padding: 5,
+  
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
 
   },
   titleContainer: {
@@ -67,6 +83,7 @@ const styles = StyleSheet.create({
     width: 300,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+
   },
   titleText: {
     fontSize: 24,
